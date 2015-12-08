@@ -1,0 +1,5 @@
+name = "PerlNabe-Sanmoku"
+# badges = ["travis"]
+module_maker="ModuleBuildTiny"
+
+readme_from="script/sanmoku.pl"
