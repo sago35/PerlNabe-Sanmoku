@@ -10,7 +10,7 @@ if (scalar @ARGV < 2) {
 binmode STDOUT => "encoding(cp932)";
 
 my @players = @ARGV[0 .. 1];
-my $wait    = @ARGV[2] // 1;
+my $wait    = $ARGV[2] // 1;
 
 my $sanmoku = PerlNabe::Sanmoku->new(
     players => [@players],
