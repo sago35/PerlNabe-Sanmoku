@@ -52,5 +52,16 @@
       }
    },
    "release_status" : "unstable",
+   "resources" : {
+      "bugtracker" : {
+         "web" : "https://github.com/sago35/PerlNabe-Sanmoku/issues"
+      },
+      "homepage" : "https://github.com/sago35/PerlNabe-Sanmoku",
+      "repository" : {
+         "type" : "git",
+         "url" : "git://github.com/sago35/PerlNabe-Sanmoku.git",
+         "web" : "https://github.com/sago35/PerlNabe-Sanmoku"
+      }
+   },
    "version" : "0.01"
 }
