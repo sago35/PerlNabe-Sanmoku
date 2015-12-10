@@ -14,13 +14,14 @@ extends 'PerlNabe::Sanmoku::Base';
 
 sub calc_next {
     my $key;
-
+    ReadMode 4;
     while (1) {
         while (not defined ($key = ReadKey(-1))) {
             Time::HiRes::sleep(0.1);
         }
 
         if ($key =~ /^\d$/) {
+            ReadMode 0;
             return int $key;
         }
     }
