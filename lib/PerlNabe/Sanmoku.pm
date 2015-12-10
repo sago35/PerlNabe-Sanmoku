@@ -77,7 +77,7 @@ sub add {
         if ($self->data->[$i] == 0) {
             $self->data->[$i] = $turn;
         } else {
-            confess "already placed";
+            confess "already placed : ".$i;
         }
     } else {
         confess;
@@ -173,4 +173,3 @@ it under the same terms as Perl itself.
 sago35 E<lt>sago35@gmail.comE<gt>
 
 =cut
-
