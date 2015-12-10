@@ -63,5 +63,8 @@
          "web" : "https://github.com/sago35/PerlNabe-Sanmoku"
       }
    },
-   "version" : "0.01"
+   "version" : "0.01",
+   "x_contributors" : [
+      "nqounet <mail@nqou.net>"
+   ]
 }
