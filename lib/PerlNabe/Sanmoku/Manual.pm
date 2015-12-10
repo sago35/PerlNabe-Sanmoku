@@ -13,6 +13,9 @@ extends 'PerlNabe::Sanmoku::Base';
 # perl -Ilib script/sanmoku.pl Manual Sample 0
 
 sub calc_next {
+    my $self = shift;
+    my @data = @_;
+
     my $key;
     ReadMode 4;
     while (1) {
@@ -20,7 +23,7 @@ sub calc_next {
             Time::HiRes::sleep(0.1);
         }
 
-        if ($key =~ /^\d$/) {
+        if ($key =~ /^\d$/ and $data[int $key] == 0) {
             ReadMode 0;
             return int $key;
         }
