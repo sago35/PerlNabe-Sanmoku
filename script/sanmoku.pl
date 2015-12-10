@@ -7,7 +7,9 @@ if (scalar @ARGV < 2) {
     die "usage : $0  Sample  Base";
 }
 
-binmode STDOUT => "encoding(cp932)";
+use Term::Encoding qw(term_encoding);
+my $encoding = term_encoding;
+binmode STDOUT => ":encoding($encoding)";
 
 my @players = @ARGV[0 .. 1];
 my $wait    = $ARGV[2] // 1;
@@ -107,4 +109,3 @@ it under the same terms as Perl itself.
 sago35 E<lt>sago35@gmail.comE<gt>
 
 =cut
-
