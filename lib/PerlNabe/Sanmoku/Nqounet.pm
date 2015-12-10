@@ -2,7 +2,7 @@ package PerlNabe::Sanmoku::Nqounet;
 use utf8;
 use Moo;
 extends 'PerlNabe::Sanmoku::Base';
-use List::AllUtils qw(all shuffle max);
+use List::AllUtils qw(all any shuffle max);
 
 use Data::Printer {deparse => 1};
 use namespace::clean;
@@ -27,13 +27,14 @@ sub calc_next {
     # 盤を評価
     my %score;
     for my $p (@pattern) {
-        my $score = 0;
+        my $score = 1;
         map { $score++ unless $_ } @{$p->{ban}};
-        $score += 5 if all { $_ == 0 } @{$p->{ban}};
+        $score += 3 if any { $_ == 2 } @{$p->{ban}};
+        $score += 5 if any { $_ == 1 } @{$p->{ban}};
         my @p = grep { $_ == 1 } @{$p->{ban}};
         my @e = grep { $_ == 2 } @{$p->{ban}};
-        $score += 20 if @p == 2;
-        $score += 10 if @e == 2;
+        $score += 21 if @e == 2;
+        $score += 34 if @p == 2;
 
         # score
         map { $score{$_} += $score } @{$p->{key}};
