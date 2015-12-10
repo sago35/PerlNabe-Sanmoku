@@ -51,7 +51,6 @@ sub calc_next {
         next if $score{$key} < $max;
         push @results, $key;
     }
-    p %score;
     my ($result) = shuffle @results;
     return $result;
 }
