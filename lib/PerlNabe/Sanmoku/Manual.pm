@@ -17,7 +17,7 @@ sub calc_next {
     my @data = @_;
 
     my $key;
-    ReadMode 4;
+    ReadMode 3;
     while (1) {
         while (not defined ($key = ReadKey(-1))) {
             Time::HiRes::sleep(0.1);
