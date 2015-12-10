@@ -2,15 +2,18 @@ package PerlNabe::Sanmoku::Nqounet;
 use utf8;
 use Moo;
 extends 'PerlNabe::Sanmoku::Base';
-use List::AllUtils qw(all);
+use List::AllUtils qw(all shuffle max);
 
 use Data::Printer {deparse => 1};
 use namespace::clean;
 
 sub calc_next {
     my $self = shift;
+
+    # 引数を取得
     my @data = @_;
-    my %score;
+
+    # パターンを定義
     my @pattern;
     push @pattern,
       {
@@ -53,6 +56,8 @@ sub calc_next {
         key => [2,       5, 8]
       };
 
+    # 盤を評価
+    my %score;
     for my $p (@pattern) {
         my $score = 0;
         map { $score++ unless $_ } @{$p->{ban}};
@@ -66,23 +71,19 @@ sub calc_next {
         map { $score{$_} += $score } @{$p->{key}};
     }
 
-    # result
-    my $result;
+    # 評価の高いものから選んで返す
+    my @results;
     for my $i (0 .. 8) {
         if ($data[$i]) {
             $score{$i} = 0;
         }
-        if ($data[$i] == 0) {
-            $result = $i;
-        }
     }
-    my $max = 0;
-    for my $key (sort keys %score) {
-        if ($score{$key} > $max) {
-            $result = $key;
-            $max    = $score{$key};
-        }
+    my $max = max(values %score);
+    for my $key (keys %score) {
+        next if $score{$key} < $max;
+        push @results, $key;
     }
+    my ($result) = shuffle @results;
     return $result;
 }
 
