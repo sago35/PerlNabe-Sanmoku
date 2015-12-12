@@ -5,7 +5,6 @@ use utf8;
 use Moo;
 
 use DDP{deparse => 1};
-use Data::Dumper;
 
 use lib 'lib';
 
@@ -14,27 +13,33 @@ extends 'PerlNabe::Sanmoku::Base';
 sub calc_next {
   my $self = shift;
   my @data = @_;
-  my @te_candidate;
+  my @te_candidate; # (打つ場所, スコア);
+
+  for my $i (@data){
+    $i = to_bit($i);
+  }
 
   make_te(\@data, \@te_candidate);
   my $good_te = undef;
+  my $good_depth = 9;
   my $good_score = -998;
   for my $te (@te_candidate){
-    if ($good_score < $te->[1]){
+    if ($good_score < $te->[2] && $good_depth >= $te->[1]){
+      $good_score = $te->[2];
+      $good_depth = $te->[1];
       $good_te = $te->[0];
-      $good_te = $te->[1];
     }
   }
 
-  if ($good_te){
+#  if ($good_te){
     return $good_te;
-  }else{
-    foreach my $i (List::Util::shuffle (0 .. 9 - 1)) {
-      if ($data[$i] == 0) {
-        return $i;
-      }
-    }
-  }
+#  }else{
+#    foreach my $i (List::Util::shuffle (0 .. 9 - 1)) {
+#      if ($data[$i] == 0) {
+#        return $i;
+#      }
+#    }
+#  }
 }
 
 sub to_bit{
@@ -53,12 +58,41 @@ sub evaluate_function{
   my $data = shift;
   my $score = 0;
   my $calcbit;
+  
+  # 詰みチェック
+  for (my $i = 0; $i <= 6 ;$i += 3){
+    #h1, h2, h3
+    my $val = check_mate($data->[$i], $data->[$i+1], $data->[$i+2]);
+    if ($val == 999 || $val == -999){
+      return $val;
+    }
+  }
 
+  for (my $i = 0; $i <= 2 ;$i++){
+    #v1, v2, v3
+    my $val = check_mate($data->[$i], $data->[$i+3], $data->[$i+6]);
+    if ($val == 999 || $val == -999){
+      return $val;
+    }
+  }
+
+  my $val = check_mate($data->[0], $data->[4], $data->[8]);
+  if ($val == 999 || $val == -999){
+    return $val;
+  }
+
+  $val = check_mate($data->[2], $data->[4], $data->[6]);
+  if ($val == 999 || $val == -999){
+    return $val;
+  }
+
+  # 盤面評価
   if ($sore == 1){
+
     #味方の手番
     for (my $i = 0; $i <= 6 ;$i += 3){
       #h1, h2, h3
-      $score += self_calcbit($data->[$i]) * self_calcbit($data->[$i+1]) * self_calcbit($data->[$i+2]);
+      $score = self_calcbit($data->[$i]) * self_calcbit($data->[$i+1]) * self_calcbit($data->[$i+2]);
     }
 
     for (my $i = 0; $i <= 2 ;$i++){
@@ -96,78 +130,79 @@ sub enemy_calcbit{
   return sqrt(($val & 0b101) ^ 0b001);
 }
 
+sub check_mate{
+  my ($i, $j, $k) = @_;
+  if (($i + $j + $k) == 9){
+    return 999;
+  }elsif(($i + $j + $k) == 15){
+    return -999;
+  }else{
+    return 0;
+  }
+}
+
+
+
 sub make_te{
   my $data = shift;
   my $te_candidate = shift;
 
   my $sore = 1;#1 = self手番, 2= enemy手番
   my @te;
-  $| = 1;
-  
-  # 空マスを調べて、配列で受け取る(階層1の初期値)
+  my $max_depth = 9;
+  my $depth = $max_depth;
+#  $| = 1;
 
-  print "初期の\@teの数:" . scalar @te . "\n";
-
+  # サーバから与えられた棋譜から、合法手そ生成
   for my $i (0..8){
     if ($data->[$i] == 0){
       my @datacp = @$data;
-      push @te, [$i, \@datacp, 1, 0];#[ルート打つ場所, 盤面配列,深さ(1~9),スコア]
+      $datacp[$i] = to_bit($sore);
+      push @te, [$i, \@datacp, 1, evaluate_function($sore, \@datacp)];#[ルート打つ場所, 盤面配列,深さ(1~9),スコア]
     }
   }
 
-  print "1階層回した後の\@teの数:" . scalar @te . "\n";
-  
-  my $depth = 2;
+  # 探索開始
   while (@te > 0){
-    my $te = pop @te;
+    my $te = shift @te;
 
-    # 空マスを調べて、配列で受け取る
-    for my $i (0..8){
-      if ($te->[1]->[$i] == 0){
-        my @datasub = @{$te->[1]};
-        push @te, [$te->[0], \@datasub, 1, 0];#[ルート打つ場所, 盤面配列,深さ(1~9),スコア]
-      }
-    }
+    if ($te->[3] == 999 || $te->[3] == -999){
+      
+      # 読み筋の出力
+      print "bord: @{$te->[1]}, score: $te->[3], depth: $te->[2]\n";
 
-  print "1つPOPした後の\@teの数:" . scalar @te . "\n";
-
-
-    $te->[1][$te->[0]] = $sore;
-#    p $sore;
-#    p $data;
-    my $bord_score = evaluate_function($sore, $data);
-#    print 'eva after';
-    $te->[3] = $bord_score;
-
-    if ($bord_score == 999 || $bord_score == -999){
-      push @$te_candidate, [$te->[0], $bord_score];
-#      print '999';
+      push @$te_candidate, [$te->[0], $te->[2], $te->[3]];
+      $depth = $te->[2] if $depth > $te->[2];
       next;
     }
 
     if ($te->[2] == $depth){
-      push @$te_candidate, [$te->[0], $bord_score];
-#      print 'depth';
+
+      # 読み筋の出力
+      print "bord: @{$te->[1]}, score: $te->[3], depth: $te->[2]\n";
+
+      push @$te_candidate, [$te->[0], $te->[2], $te->[3]];
       next;
     }
+
+    # 勝ち負けが決まってない、かつ、探索深度まで達していない
+
+    # 敵味方手番を変える
 
     if ($sore == 1){
       $sore = 2;
     }else{
       $sore = 1;
     }
-#    print 'push';
-    print "depth:$te->[2]\n";
-    print "\@teの数".scalar(@te)."\n";
-    push @te, [$te->[0], $te->[1], $te->[2] + 1 ,0];
-    print "\@teの数".scalar(@te)."\n";
 
-
-    #else @spaceへもう一度push
-    #push $te@space
+    # 合法手を生成してpush
+    for my $i (0..8){
+      if ($te->[1]->[$i] == 0){
+        my @datasub = @{$te->[1]};
+        $datasub[$i] = to_bit($sore);
+        push @te, [$te->[0], \@datasub, ($te->[2] + 1), evaluate_function($sore, \@datasub)];#[ルート打つ場所, 盤面配列,深さ(1~9),スコア]
+      }
+    }
   }
-  # pushで位置を埋めて譜をつくる
-  # 譜を評価して点数を受け取る
-  # 位置と点数と譜のデータ
 }
 1;
