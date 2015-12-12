@@ -169,7 +169,7 @@ sub make_te{
     if ($te->[3] == 999 || $te->[3] == -999){
       
       # 読み筋の出力
-      print "bord: @{$te->[1]}, score: $te->[3], depth: $te->[2]\n";
+#      print "bord: @{$te->[1]}, score: $te->[3], depth: $te->[2]\n";
 
       push @$te_candidate, [$te->[0], $te->[2], $te->[3]];
       $depth = $te->[2] if $depth > $te->[2];
@@ -179,7 +179,7 @@ sub make_te{
     if ($te->[2] == $depth){
 
       # 読み筋の出力
-      print "bord: @{$te->[1]}, score: $te->[3], depth: $te->[2]\n";
+#      print "bord: @{$te->[1]}, score: $te->[3], depth: $te->[2]\n";
 
       push @$te_candidate, [$te->[0], $te->[2], $te->[3]];
       next;
