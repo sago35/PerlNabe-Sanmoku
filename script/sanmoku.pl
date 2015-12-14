@@ -1,6 +1,8 @@
+#!/usr/bin/env perl
 use strict;
 use warnings;
 use utf8;
+use lib 'lib';
 use PerlNabe::Sanmoku;
 
 if (scalar @ARGV < 2) {
