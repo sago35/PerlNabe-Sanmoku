@@ -7,7 +7,7 @@ PerlNabe::Sanmoku - ○×ゲーム
     # PerlNabe::Sanmoku::Base および PerlNabe::Sanmoku::Rand モジュールを対決させる
     # 最初の引数に指定した側が先行となる
 
-    $ perl sanmoku.pl Base Rand
+    $ script/sanmoku.pl Base Rand
 
 # DESCRIPTION
 
@@ -78,4 +78,4 @@ it under the same terms as Perl itself.
 
 # AUTHOR
 
-sago35 <sago35@gmail.com>
+sago35 &lt;sago35@gmail.com>
