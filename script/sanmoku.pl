@@ -37,7 +37,7 @@ PerlNabe::Sanmoku - ○×ゲーム
     # PerlNabe::Sanmoku::Base および PerlNabe::Sanmoku::Rand モジュールを対決させる
     # 最初の引数に指定した側が先行となる
 
-    $ perl sanmoku.pl Base Rand
+    $ script/sanmoku.pl Base Rand
 
 =head1 DESCRIPTION
 
