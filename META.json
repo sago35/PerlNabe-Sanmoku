@@ -65,6 +65,7 @@
    },
    "version" : "0.01",
    "x_contributors" : [
+      "tomcha <tomcha@tomcha.net>",
       "nqounet <mail@nqou.net>"
    ]
 }
