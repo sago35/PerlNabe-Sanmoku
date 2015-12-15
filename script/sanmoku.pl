@@ -105,6 +105,31 @@ calc_next()内では、引数により現在の盤にアクセスする事が可
         }
     }
 
+=head2 I can't write perl script
+
+PerlNabe::Sanmoku::Execを使う事で、標準入出力を使ったプログラムでプレイする事が可能です。
+C言語やruby、golang等で開発する事も可能です。
+Base.pmと実際に対戦させるサンプルは以下の通りです。
+今回は lib/PerlNabe/Sanmoku/exec_sample.pl での例を示します。
+他の言語でも同じように実装する事で対戦が可能です。
+
+    $ perl -Ilib script/sanmoku.pl Base "Exec=perl lib/PerlNabe/Sanmoku/exec_sample.pl"
+
+作成するプログラムの仕様は以下の通りです。
+
+    標準入力からスペース区切りで以下を受け取ります
+    順に$data[0]、$data[1]、というイメージです
+
+    0 0 0
+    0 0 0
+    0 0 0
+
+    自分が打つ手は、標準出力に出力してください
+    C言語で真ん中に打つ例は、以下の通りです
+    改行文字の有無はどちらでも構いません
+
+    printf("%d\n", 4);
+
 =head1 LICENSE
 
 Copyright (C) sago35.

@@ -17,8 +17,9 @@ sub run {
 
     my @players;
     foreach my $player (@{$self->players}) {
-        require "PerlNabe/Sanmoku/$player.pm";
-        push @players, "PerlNabe::Sanmoku::$player"->new(name => $player);
+        my ($module, $opt) = split /=/, $player, 2;
+        require "PerlNabe/Sanmoku/$module.pm";
+        push @players, "PerlNabe::Sanmoku::$module"->new(name => $player, cmd => $opt);
     }
 
     printf "player[0] (○) => %s\n", $players[0]->name;
