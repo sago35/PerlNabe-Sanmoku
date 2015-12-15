@@ -23,7 +23,13 @@ calc\_next()内では、引数により現在の盤にアクセスする事が�
     # ---+---+---
     #  6 | 7 | 8
 
-    my @data = @{$self->data()};
+    sub calc_next {
+        my $self = shift;
+        my @data = @_;
+        # $data[0] は 左上の状態、$data[4]は真ん中の状態を表す
+
+        return 4; # 真ん中に自分の手を打つ場合は、4を返す
+    }
 
 盤の状況は、それぞれ以下の通りです。
 
@@ -78,4 +84,4 @@ it under the same terms as Perl itself.
 
 # AUTHOR
 
-sago35 &lt;sago35@gmail.com>
+sago35 <sago35@gmail.com>
