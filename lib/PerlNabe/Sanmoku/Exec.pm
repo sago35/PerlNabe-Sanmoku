@@ -16,7 +16,7 @@ sub calc_next {
 
     my $t = Path::Tiny->tempfile;
     printf "--- %s\n", $self->cmd;
-    open my $in, "|" . $self->cmd . "> $t" or croak $!;
+    open my $in, "|" . $self->cmd . " @data > $t" or croak $!;
     printf $in "%s\n", join " ", @data[0..2];
     printf $in "%s\n", join " ", @data[3..5];
     printf $in "%s\n", join " ", @data[6..8];
