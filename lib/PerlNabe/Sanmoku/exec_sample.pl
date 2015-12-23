@@ -18,7 +18,7 @@ use utf8;
 #
 
 my @data;
-while (<>) {
+while (<STDIN>) {
     push @data, (split /\s+/)[0 .. 2];
 }
 
