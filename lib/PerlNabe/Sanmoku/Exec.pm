@@ -5,6 +5,7 @@ use warnings;
 use utf8;
 use Moo;
 use Path::Tiny;
+use Carp;
 
 extends 'PerlNabe::Sanmoku::Base';
 
@@ -24,6 +25,10 @@ sub calc_next {
 
     my $value = $t->slurp;
     chomp $value;
+
+    if ($value !~ /^[0-8]$/) {
+        croak "exec error";
+    }
 
     return int $value;
 }
