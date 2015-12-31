@@ -30,18 +30,19 @@ sub run {
     $self->dump;
 
     for (my $i = 0; $i < 9; $i++) {
+        my $player_index = $i % 2;
         printf "\n";
-        printf "next: player[%d] (%s)\n", ($i)%2, $players[($i)%2]->name;
+        printf "next: player[%d] (%s)\n", $player_index, $players[$player_index]->name;
         if ($self->wait) {
             <STDIN>;
         }
 
-        my $next = $players[$i%2]->calc_next($self->data_for_player($i%2));
+        my $next = $players[$player_index]->calc_next($self->data_for_player($player_index));
 
-        if ($i % 2) {
-            $self->add_x($next);
-        } else {
+        if ($player_index == 0) {
             $self->add_o($next);
+        } else {
+            $self->add_x($next);
         }
 
         $self->dump;
