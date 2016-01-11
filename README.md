@@ -4,10 +4,27 @@ PerlNabe::Sanmoku - ○×ゲーム
 
 # SYNOPSIS
 
+    perl script/sanmoku.pl [--no-wait] player1 player2
+
+        --no-wait :
+            waitせずに勝敗が決まるまで進めます
+            指定しない場合は、1手毎に停止します
+
+        player1 および player2 :
+            Perlnabe::Sanmoku以下のモジュールを指定できます
+
+    例1)
     # PerlNabe::Sanmoku::Base および PerlNabe::Sanmoku::Rand モジュールを対決させる
     # 最初の引数に指定した側が先行となる
 
     $ script/sanmoku.pl Base Rand
+
+    例2)
+    # PerlNabe::Sanmoku::Exec および PerlNabe::Sanmoku::Manual モジュールを対決させる
+    # Execからは、sample/exec_sample.plを使用する
+    # また、Manual(手動で0～8を選択する)を使うため、--no-waitを指定する
+
+    $ script/sanmoku.pl --no-wait "Exec=perl sample/exec_sample.pl" Manual
 
 # DESCRIPTION
 
