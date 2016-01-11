@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use utf8;
 use lib 'lib';
-use PerlNabe::Sanmoku;
+use PerlNabe::Sanmoku::CLI::Run;
 
 if (scalar @ARGV < 2) {
     die "usage : $0  Sample  Base";
@@ -13,15 +13,7 @@ use Term::Encoding qw(term_encoding);
 my $encoding = term_encoding;
 binmode STDOUT => ":encoding($encoding)";
 
-my @players = @ARGV[0 .. 1];
-my $wait    = $ARGV[2] // 1;
-
-my $sanmoku = PerlNabe::Sanmoku->new(
-    players => [@players],
-    wait    => $wait,
-);
-$sanmoku->run;
-
+PerlNabe::Sanmoku::CLI::Run->run(@ARGV);
 
 
 __END__
