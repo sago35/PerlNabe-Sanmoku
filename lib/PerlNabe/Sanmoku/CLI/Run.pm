@@ -12,7 +12,8 @@ sub run {
     my @argv = @_;
 
     my $options = {
-        nowait => 0,
+        nowait  => 0,
+        reverse => 0,
     };
 
     my @params;
@@ -22,6 +23,7 @@ sub run {
             local @ARGV = @argv;
             GetOptions($options,
                 "no-wait" => \$options->{nowait},
+                "reverse" => \$options->{reverse},
             ) || confess "error";
             @argv = @ARGV;
         } else {
@@ -29,8 +31,9 @@ sub run {
         }
     }
 
+    my $players = $options->{reverse} ? [@params[1, 0]] : [@params[0, 1]];
     my $sanmoku = PerlNabe::Sanmoku->new(
-        players => [@params[0, 1]],
+        players => $players,
         wait    => !$options->{nowait},
     );
     $sanmoku->run;
