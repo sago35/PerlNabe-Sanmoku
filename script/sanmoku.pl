@@ -28,11 +28,14 @@ PerlNabe::Sanmoku - ○×ゲーム
 
 =head1 SYNOPSIS
 
-    perl script/sanmoku.pl [--no-wait] player1 player2
+    perl script/sanmoku.pl [--no-wait] [--reverse] player1 player2
 
         --no-wait :
             waitせずに勝敗が決まるまで進めます
             指定しない場合は、1手毎に停止します
+
+        --reverse :
+            先攻後攻を入れ替えます
 
         player1 および player2 :
             Perlnabe::Sanmoku以下のモジュールを指定できます
